@@ -1,6 +1,6 @@
 var acc = document.getElementsByClassName("accordion");
 
-acc.forEach(function(e){
+acc.forEach(function(e) {
     e.onclick = function() {
         this.classList.toggle("active");
         this.nextElementSibling.classList.toggle("tease");
