@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Read More Accordion Widget Plugin
+Plugin Name: Read More Accordion Widget
 Description: A simple widget to create accorrdion style "Read More"
 Version: 1.0
 Author: Dimitris Mavroudis
