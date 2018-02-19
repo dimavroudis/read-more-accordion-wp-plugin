@@ -2,6 +2,7 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    height: 54px;
     margin: 10px auto;
     cursor: pointer;
     -webkit-box-align: center;
@@ -56,12 +57,14 @@ div.below-fold-panel {
     max-height: 36px;
 }
 
+
 div.below-fold-panel.show {
     opacity: 1;
     max-height: 2000px;
 }
-
+/*
 div.below-fold-panel.tease {
     opacity: 0.3;
     max-height: 62px;
 }
+*/

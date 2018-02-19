@@ -22,23 +22,16 @@ class read_more_accordion extends WP_Widget {
 	// widget form creation
 	function form($instance) {	
             if( $instance) {
-                $title = esc_attr($instance['title']);
                 $above_fold = esc_textarea($instance['above_fold']);
                 $below_fold = esc_textarea($instance['below_fold']);
                 $read_more_text = esc_attr($instance['read_more_text']);
                 $read_less_text = esc_attr($instance['read_less_text']);
             } else {
-                $title = '';
                 $above_fold = '';
                 $below_fold = '';
-                $read_more_text = 'Read More';
-                $read_less_text = 'Read Less';
+                $read_more_text = __('Read More', 'read-more-accordion');
+                $read_less_text = __('Read Less', 'read-more-accordion');
             } ?>
-
-            <p>
-                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title', 'read_more_accordion'); ?></label>
-                <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-            </p>
 
             <p>
                 <label for="<?php echo $this->get_field_id('above_fold'); ?>"><?php _e('Above Fold (basic HTML allowed):', 'read_more_accordion'); ?></label>
@@ -63,7 +56,6 @@ class read_more_accordion extends WP_Widget {
 	function update($new_instance, $old_instance) {
 		$instance = $old_instance;
         // Fields
-        $instance['title'] = strip_tags($new_instance['title']);
         $instance['above_fold'] = strip_tags($new_instance['above_fold'], '<p><span><a><b><i><img><br>');
         $instance['below_fold'] = strip_tags($new_instance['below_fold'], '<p><span><a><b><i><img><br>');
         $instance['read_more_text'] = strip_tags($new_instance['read_more_text']);
@@ -75,25 +67,12 @@ class read_more_accordion extends WP_Widget {
 	function widget($args, $instance) {
         extract( $args );
         // these are the widget options
-        $title = apply_filters('widget_title', $instance['title']);
-        $text = $instance['text'];
         $above_fold = $instance['above_fold'];
         $below_fold = $instance['below_fold'];
         $read_more_text = $instance['read_more_text'];
         $read_less_text = $instance['read_less_text'];
-        echo $before_widget; ?>
-            <div id="above_fold" class="above-fold-panel">
-              <?php echo $above_fold ?>
-            </div>
-            <div class="accordion">
-                <div class="read-more-line"></div>
-                <div class="read-more-text"><?php echo $read_more_text ?></div>
-                <div class="read-less-text"><?php echo $read_less_text ?></div>
-                <div class="read-more-line"></div>
-            </div>
-            <div id="below_fold" class="below-fold-panel">
-              <?php echo $below_fold ?>
-            </div><?php
+        echo $before_widget;
+		read_more_accordion_front($above_fold, $below_fold,  $read_more_text,$read_less_text);
         echo $after_widget;
 	}
 }
@@ -118,4 +97,22 @@ function register_read_more_accordion() {
 }
 add_action( 'widgets_init', 'register_read_more_accordion' );
 
+function read_more_shortcode( $atts ) {
+	$attr = shortcode_atts( array(
+		'above_fold' => '',
+		'below_fold' => '',
+		'read_more' => __('Read More', 'read-more-accordion'),
+		'read_less' => __('Read Less', 'read-more-accordion'),
+	), $atts );
+
+	return read_more_accordion_front($attr['above_fold'], $attr['below_fold'], $attr['read_more'], $attr['read_less']);
+}
+add_shortcode( 'read_more', 'read_more_shortcode' );
+
+
+function read_more_accordion_front( $above_fold, $below_fold, $read_more_text, $read_less_text){
+	$html = '<div id="above_fold" class="above-fold-panel">' .  $above_fold . '</div> <div class="accordion"><div class="read-more-line"></div> <div class="read-more-text">' . $read_more_text .
+			'</div><div class="read-less-text">' . $read_less_text . '</div><div class="read-more-line"></div></div><div id="below_fold" class="below-fold-panel">' . $below_fold . '</div>';
+	return $html;
+}
 ?>
